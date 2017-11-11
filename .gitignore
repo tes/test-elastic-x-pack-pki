@@ -1,0 +1,6 @@
+/.terraform
+terraform.tfstate*
+
+# Generated assets
+/ssl
+/docker-compose.yml

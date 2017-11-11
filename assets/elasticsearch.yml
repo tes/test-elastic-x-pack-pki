@@ -1,0 +1,41 @@
+cluster.name: elasticsearch
+node.name: ${HOSTNAME}
+
+network.bind_host: 0.0.0.0
+network.publish_host: _site_
+
+xpack.ssl.key: "/etc/ssl/elasticsearch/server.key"
+xpack.ssl.certificate: "/etc/ssl/elasticsearch/server.crt"
+xpack.ssl.certificate_authorities:
+  - "/etc/ssl/elasticsearch/ca.crt"
+
+xpack.ssl.verification_mode: "full"
+
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.client_authentication: "optional"
+
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.client_authentication: "optional"
+xpack.security.transport.ssl.verification_mode: "certificate"
+
+xpack.security.authc.realms:
+  pki:
+    type: pki
+    order: 0
+    certificate_authorities:
+      - "/etc/ssl/elasticsearch/ca.crt"
+  native:
+    type: native
+    order: 1
+
+# Watcher notification accounts
+xpack.notification.hipchat:
+  account:
+    notify-monitoring:
+      profile: v1
+      auth_token: deadbeef
+
+xpack.notification.pagerduty:
+  account:
+    notify-devops:
+      service_api_key: deadbeef
