@@ -114,7 +114,7 @@ resource "tls_cert_request" "elasticsearch_kibana_client" {
   private_key_pem = "${tls_private_key.elasticsearch_kibana_client.private_key_pem}"
 
   subject {
-    common_name  = "kibana_system"
+    common_name  = "kibana"
     organization = "elasticsearch"
   }
 }
