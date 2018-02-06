@@ -8,6 +8,7 @@ xpack.ssl.key: "/etc/ssl/elasticsearch/server.key"
 xpack.ssl.certificate: "/etc/ssl/elasticsearch/server.crt"
 xpack.ssl.certificate_authorities:
   - "/etc/ssl/elasticsearch/ca.crt"
+  - "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"
 
 xpack.ssl.verification_mode: "full"
 
