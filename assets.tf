@@ -1,6 +1,6 @@
 variable "version" {
   description = "Version of ES and Kibana to use"
-  default     = "6.1.0"
+  default     = "6.1.3"
 }
 
 # Root CA
