@@ -1,6 +1,6 @@
 cluster.name: elasticsearch
 node.name: ${HOSTNAME}
-cluster.routing.allocation.enable" : "all"
+cluster.routing.allocation.enable: "all"
 
 network.bind_host: 0.0.0.0
 network.publish_host: _site_
