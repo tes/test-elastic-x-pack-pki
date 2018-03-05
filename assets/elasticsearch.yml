@@ -1,8 +1,11 @@
 cluster.name: elasticsearch
 node.name: ${HOSTNAME}
+cluster.routing.allocation.enable" : "all"
 
 network.bind_host: 0.0.0.0
 network.publish_host: _site_
+
+path.repo: ["/opt/"]
 
 xpack.ssl.key: "/etc/ssl/elasticsearch/server.key"
 xpack.ssl.certificate: "/etc/ssl/elasticsearch/server.crt"
