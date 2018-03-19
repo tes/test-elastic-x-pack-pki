@@ -1,0 +1,5 @@
+metricbeat_role:
+  - "cn=metricbeat, o=elasticsearch"
+
+kibana_system:
+  - "cn=metricbeat, o=elasticsearch"

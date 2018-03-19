@@ -1,0 +1,15 @@
+metricbeat_role:
+  run_as: []
+  cluster:
+    - monitor
+    - manage_index_templates
+  indices:
+    - names: [ 'metricbeat-*' ]
+      privileges:
+        - read
+        - view_index_metadata
+        - create
+        - create_index
+        - write
+        - index
+        - manage
