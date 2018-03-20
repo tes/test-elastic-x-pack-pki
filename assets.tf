@@ -320,6 +320,8 @@ services:
       - 5601:5601
     networks:
       - elastic-x-pack
+    depends_on:
+      - elasticsearch
   metricbeat:
     image: docker.elastic.co/beats/metricbeat:${var.version}
     volumes:
@@ -330,6 +332,8 @@ services:
     user: root
     networks:
       - elastic-x-pack
+    depends_on:
+      - elasticsearch
 volumes:
   elasticsearch-data: {}
 networks:
