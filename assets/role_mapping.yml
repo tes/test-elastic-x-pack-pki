@@ -3,3 +3,6 @@ metricbeat_role:
 
 kibana_system:
   - "cn=metricbeat, o=elasticsearch"
+
+remote_monitoring_agent:
+  - "cn=elasticsearch, o=elasticsearch"

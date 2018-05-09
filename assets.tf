@@ -1,6 +1,6 @@
 variable "version" {
   description = "Version of ES and Kibana to use"
-  default     = "6.2.2"
+  default     = "6.2.3"
 }
 
 variable "elastic_password" {
