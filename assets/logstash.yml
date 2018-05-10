@@ -1,0 +1,14 @@
+xpack.management.enabled: true
+xpack.management.elasticsearch.url: https://elasticsearch:9200
+xpack.management.elasticsearch.ssl.ca: /etc/ssl/logstash/ca.crt
+xpack.management.elasticsearch.username: ${ELASTICSEARCH_ADMIN_USERNAME}
+xpack.management.elasticsearch.password: ${ELASTICSEARCH_ADMIN_PASSWORD}
+xpack.management.pipeline.id:
+  - beats
+  - common
+xpack.monitoring.enabled: true
+xpack.monitoring.elasticsearch.url: https://elasticsearch:9200
+xpack.monitoring.elasticsearch.ssl.ca: /etc/ssl/logstash/ca.crt
+xpack.monitoring.elasticsearch.username: ${ELASTICSEARCH_USERNAME}
+xpack.monitoring.elasticsearch.password: ${ELASTICSEARCH_PASSWORD}
+queue.type: persisted

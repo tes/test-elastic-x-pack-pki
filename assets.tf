@@ -175,6 +175,47 @@ resource "tls_locally_signed_cert" "metricbeat_client_cert" {
   ]
 }
 
+# Logstash
+resource "tls_private_key" "logstash_client_key" {
+  algorithm = "RSA"
+  rsa_bits  = "2048"
+}
+
+resource "tls_cert_request" "logstash_client_req" {
+  key_algorithm   = "${tls_private_key.logstash_client_key.algorithm}"
+  private_key_pem = "${tls_private_key.logstash_client_key.private_key_pem}"
+
+  subject {
+    common_name  = "logstash"
+    organization = "elasticsearch"
+  }
+}
+
+resource "tls_locally_signed_cert" "logstash_client_cert" {
+  cert_request_pem = "${tls_cert_request.logstash_client_req.cert_request_pem}"
+
+  ca_key_algorithm   = "${tls_private_key.intermediate_ca.algorithm}"
+  ca_private_key_pem = "${tls_private_key.intermediate_ca.private_key_pem}"
+  ca_cert_pem        = "${tls_locally_signed_cert.intermediate_ca.cert_pem}"
+
+  validity_period_hours = 8760
+  early_renewal_hours   = 2160
+
+  allowed_uses = [
+    "digital_signature",
+    "key_encipherment",
+    "client_auth",
+  ]
+}
+
+resource "local_file" "elasticsearch_hosts" {
+  content = <<EOF
+https://elastic:${var.elastic_password}@elasticsearch:9200
+EOF
+
+  filename = "${path.module}/ssl/logstash/elasticsearch_hosts"
+}
+
 # Generating assets as files
 locals {
   ca_cert_chain_pem = "${join("\n", list(
@@ -236,6 +277,22 @@ resource "local_file" "ssl_metricbeat_client_crt" {
 resource "local_file" "ssl_metricbeat_client_key" {
   content  = "${tls_private_key.metricbeat_client_key.private_key_pem}"
   filename = "${path.module}/ssl/metricbeat/client.key"
+}
+
+# Logstash
+resource "local_file" "ssl_logstash_ca_crt" {
+  content  = "${local.ca_cert_chain_pem}"
+  filename = "${path.module}/ssl/logstash/ca.crt"
+}
+
+resource "local_file" "ssl_logstash_client_crt" {
+  content  = "${tls_locally_signed_cert.logstash_client_cert.cert_pem}"
+  filename = "${path.module}/ssl/logstash/logstash_client.crt"
+}
+
+resource "local_file" "ssl_logstash_client_key" {
+  content  = "${tls_private_key.logstash_client_key.private_key_pem}"
+  filename = "${path.module}/ssl/logstash/logstash_client.key"
 }
 
 resource "local_file" "metricbeat_yml" {
@@ -334,8 +391,29 @@ services:
       - elastic-x-pack
     depends_on:
       - elasticsearch
+  logstash:
+    image: docker.elastic.co/logstash/logstash:${var.version}
+    volumes:
+      - ./ssl/logstash:/etc/ssl/logstash
+      - ./assets/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+    environment:
+      ELASTICSEARCH_USERNAME: elastic
+      ELASTICSEARCH_PASSWORD: "${var.elastic_password}"
+      ELASTICSEARCH_ADMIN_USERNAME: elastic
+      ELASTICSEARCH_ADMIN_PASSWORD: "${var.elastic_password}"
+      ELASTICSEARCH_INGEST_USERNAME: elastic
+      ELASTICSEARCH_INGEST_PASSWORD: "${var.elastic_password}"
+      LS_JAVA_OPTS: "-Xmx1g"
+    ports:
+      - 5044:5044
+    networks:
+      - elastic-x-pack
+    depends_on:
+      - elasticsearch
+
 volumes:
   elasticsearch-data: {}
+
 networks:
   elastic-x-pack:
 EOF

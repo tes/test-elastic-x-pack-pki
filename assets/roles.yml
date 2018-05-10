@@ -13,3 +13,18 @@ metricbeat_role:
         - write
         - index
         - manage
+
+logstash_ingest:
+  run_as: []
+  cluster:
+    - monitor
+    - manage_index_templates
+  indices:
+    - names: [ 'logstash-*', 'filebeat-*', 'metricbeat-*', 'apm-*', 'nginx-*' ]
+      privileges:
+        - index
+        - create_index
+    - names: [ 'events' ]
+      privileges:
+        - index
+        - create_index

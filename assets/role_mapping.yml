@@ -6,3 +6,6 @@ kibana_system:
 
 remote_monitoring_agent:
   - "cn=elasticsearch, o=elasticsearch"
+
+logstash_ingest:
+  - "cn=logstash, o=elasticsearch"
